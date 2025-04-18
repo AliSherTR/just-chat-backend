@@ -25,7 +25,7 @@ export class AuthController {
 
   @Post('signin')
   @ApiOperation({ summary: 'Login a user' })
-  @ApiBody({ type: SignUpDto })
+  @ApiBody({ type: SignInDto })
   @ApiResponse({ status: 200, description: 'User logged in successfully' })
   @ApiResponse({ status: 400, description: 'Invalid input' })
   async signIn(@Body() body: SignInDto) {
