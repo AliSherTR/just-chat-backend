@@ -20,6 +20,7 @@ model User {
   isLoggedIn Boolean  @default(false)
   email      String   @unique
   password   String?
+  isVerified Boolean  @default(false)
   image      String?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt

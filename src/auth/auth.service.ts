@@ -66,13 +66,13 @@ export class AuthService {
         ]),
       );
     }
-    if (user.isLoggedIn) {
-      throw new UnauthorizedException(
-        createResponse('error', 'Account already logged in', null, [
-          'Account already logged in',
-        ]),
-      );
-    }
+    // if (user.isLoggedIn) {
+    //   throw new UnauthorizedException(
+    //     createResponse('error', 'Account already logged in', null, [
+    //       'Account already logged in',
+    //     ]),
+    //   );
+    // }
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       throw new ConflictException(
