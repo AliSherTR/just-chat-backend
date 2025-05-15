@@ -11,6 +11,6 @@ export class SignUpDto {
     name: string
 
     @ApiProperty({example: "A very strong password" , description: "Password"} )
-    @IsStrongPassword({} , { message: 'Password must be strong' })
+    @IsString({message: "Password is required"})
     password: string;
 }
