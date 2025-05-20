@@ -1,4 +1,9 @@
-import { BadRequestException, ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { createResponse } from 'src/common/utils/reponse.utils';
@@ -11,17 +16,17 @@ export class AuthService {
     private readonly JwtService: JwtService,
   ) {}
 
-  async findUserById(id: string){
+  async findUserById(id: string) {
     const user = await this.prismaService.user.findUnique({
-        where: {
-            id
-        }
-    })
-    if(!user) {
-        throw new BadRequestException(createResponse("error" , "Invalid Request"))
+      where: {
+        id,
+      },
+    });
+    if (!user) {
+      throw new BadRequestException(createResponse('error', 'Invalid Request'));
     }
 
-    return {...user , password: undefined};
+    return { ...user, password: undefined };
   }
 
   async signUp(name: string, email: string, password: string) {
@@ -52,7 +57,6 @@ export class AuthService {
     });
   }
 
-
   async signIn(email: string, password: string) {
     const user = await this.prismaService.user.findUnique({
       where: {
@@ -61,7 +65,7 @@ export class AuthService {
     });
     if (!user) {
       throw new UnauthorizedException(
-        createResponse('error', 'Invalid credentials', null, [
+        createResponse('error', 'Invalid Email or password', null, [
           'Invalid credentials',
         ]),
       );
@@ -83,13 +87,13 @@ export class AuthService {
     }
 
     await this.prismaService.user.update({
-        where: {
-            email: user.email
-        },
-        data: {
-            isLoggedIn: true
-        }
-    })
+      where: {
+        email: user.email,
+      },
+      data: {
+        isLoggedIn: true,
+      },
+    });
     const token = await this.JwtService.signAsync({ id: user.id });
     return createResponse('success', 'Login Successful', {
       access_token: token,
@@ -98,28 +102,30 @@ export class AuthService {
 
   async signOut(req: any) {
     const user = await this.prismaService.user.findUnique({
-        where: {
-            id: req.user.id
-        }
-    })
+      where: {
+        id: req.user.id,
+      },
+    });
 
-    if(!user) {
-        throw new BadRequestException(createResponse("error" , "Invalid Request"))
+    if (!user) {
+      throw new BadRequestException(createResponse('error', 'Invalid Request'));
     }
 
-    if(!user.isLoggedIn) {
-        throw new ConflictException(createResponse("error" , "Account already logged out"))
+    if (!user.isLoggedIn) {
+      throw new ConflictException(
+        createResponse('error', 'Account already logged out'),
+      );
     }
 
     await this.prismaService.user.update({
-        where: {
-            email: user.email
-        },
-        data: {
-            isLoggedIn: false
-        }
-    })
+      where: {
+        email: user.email,
+      },
+      data: {
+        isLoggedIn: false,
+      },
+    });
 
-    return createResponse("success" , "Logged Out Successfully")
+    return createResponse('success', 'Logged Out Successfully');
   }
 }

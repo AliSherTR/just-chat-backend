@@ -138,6 +138,23 @@ exports.Prisma.OtpScalarFieldEnum = {
   expiresAt: 'expiresAt'
 };
 
+exports.Prisma.ChatGroupScalarFieldEnum = {
+  id: 'id',
+  user1Id: 'user1Id',
+  user2Id: 'user2Id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MessageScalarFieldEnum = {
+  id: 'id',
+  chatGroupId: 'chatGroupId',
+  senderId: 'senderId',
+  emoji: 'emoji',
+  content: 'content',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -156,7 +173,9 @@ exports.Prisma.NullsOrder = {
 
 exports.Prisma.ModelName = {
   User: 'User',
-  otp: 'otp'
+  otp: 'otp',
+  ChatGroup: 'ChatGroup',
+  Message: 'Message'
 };
 
 /**

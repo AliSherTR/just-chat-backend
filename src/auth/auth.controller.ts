@@ -1,4 +1,13 @@
-import { Body, Controller, Post, Req, Res, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  Post,
+  Req,
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { SignUpDto } from './dto/signup.dto';
@@ -13,27 +22,27 @@ export class AuthController {
   @ApiOperation({ summary: 'Register a new user' })
   @ApiBody({ type: SignUpDto })
   @ApiResponse({ status: 201, description: 'User created successfully' })
-  @ApiResponse({ status: 400, description: 'Invalid input or email already taken' })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid input or email already taken',
+  })
   @UsePipes(ValidationPipe)
   async signUp(@Body() body: SignUpDto) {
-    return await this.authService.signUp(
-      body.name,
-      body.email,
-      body.password,
-    );
+    return await this.authService.signUp(body.name, body.email, body.password);
   }
 
   @Post('signin')
   @ApiOperation({ summary: 'Login a user' })
+  @HttpCode(200)
   @ApiBody({ type: SignInDto })
   @ApiResponse({ status: 200, description: 'User logged in successfully' })
   @ApiResponse({ status: 400, description: 'Invalid input' })
   async signIn(@Body() body: SignInDto) {
-    return this.authService.signIn(body.email , body.password);
+    return this.authService.signIn(body.email, body.password);
   }
 
   @Post('signout')
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'Log out a user' })
   async singout(@Req() req: Request) {
     return this.authService.signOut(req);
