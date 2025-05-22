@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   Post,
   Req,
@@ -39,6 +40,16 @@ export class AuthController {
   @ApiResponse({ status: 400, description: 'Invalid input' })
   async signIn(@Body() body: SignInDto) {
     return this.authService.signIn(body.email, body.password);
+  }
+
+  @Get('profile')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiOperation({ summary: 'Get user information' })
+  @HttpCode(200)
+  @ApiResponse({ status: 200, description: 'User fetched successfully' })
+  @ApiResponse({ status: 404, description: 'No user found' })
+  async getProfileInfo(@Req() req: any) {
+    return this.authService.getProfileInfo(req.user.id);
   }
 
   @Post('signout')

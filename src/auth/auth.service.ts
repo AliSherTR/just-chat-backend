@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -127,5 +128,27 @@ export class AuthService {
     });
 
     return createResponse('success', 'Logged Out Successfully');
+  }
+
+  async getProfileInfo(userId: string) {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        name: true,
+        email: true,
+        image: true,
+        updatedAt: true,
+        createdAt: true,
+        id: true,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException(createResponse('error', 'No User found'));
+    }
+
+    return createResponse('success', 'user details fetched successfully', user);
   }
 }
