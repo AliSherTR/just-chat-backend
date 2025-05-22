@@ -88,6 +88,64 @@
 //   recipient   User     @relation("ReceivedMessages", fields: [recipientId], references: [id])
 // }
 
+// generator client {
+//   provider = "prisma-client-js"
+//   output   = "../generated/prisma"
+// }
+
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
+// }
+
+// model User {
+//   id           String      @id @default(cuid())
+//   name         String?
+//   isLoggedIn   Boolean     @default(false)
+//   email        String      @unique
+//   password     String?
+//   isVerified   Boolean     @default(false)
+//   image        String?
+//   createdAt    DateTime    @default(now())
+//   updatedAt    DateTime    @updatedAt
+//   sentMessages Message[]   @relation("SentMessages")
+//   chatGroups1  ChatGroup[] @relation("User1ChatGroups")
+//   chatGroups2  ChatGroup[] @relation("User2ChatGroups")
+// }
+
+// model otp {
+//   id        String   @id @default(cuid())
+//   email     String   @unique
+//   code      String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+//   expiresAt DateTime
+// }
+
+// model ChatGroup {
+//   id        String    @id @default(cuid())
+//   user1Id   String
+//   user2Id   String
+//   createdAt DateTime  @default(now())
+//   updatedAt DateTime  @updatedAt
+//   user1     User      @relation("User1ChatGroups", fields: [user1Id], references: [id])
+//   user2     User      @relation("User2ChatGroups", fields: [user2Id], references: [id])
+//   messages  Message[] @relation("ChatGroupMessages")
+
+//   @@unique([user1Id, user2Id]) // Ensure unique user pair
+// }
+
+// model Message {
+//   id          String    @id @default(uuid())
+//   chatGroupId String
+//   senderId    String
+//   emoji       String
+//   content     String
+//   createdAt   DateTime  @default(now())
+//   chatGroup   ChatGroup @relation("ChatGroupMessages", fields: [chatGroupId], references: [id], onDelete: Cascade)
+//   sender      User      @relation("SentMessages", fields: [senderId], references: [id])
+// }
+
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
@@ -142,6 +200,7 @@ model Message {
   emoji       String
   content     String
   createdAt   DateTime  @default(now())
+  isRead      Boolean   @default(false) // Added to track unread messages
   chatGroup   ChatGroup @relation("ChatGroupMessages", fields: [chatGroupId], references: [id], onDelete: Cascade)
   sender      User      @relation("SentMessages", fields: [senderId], references: [id])
 }

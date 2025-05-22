@@ -4520,6 +4520,7 @@ export namespace Prisma {
     emoji: string | null
     content: string | null
     createdAt: Date | null
+    isRead: boolean | null
   }
 
   export type MessageMaxAggregateOutputType = {
@@ -4529,6 +4530,7 @@ export namespace Prisma {
     emoji: string | null
     content: string | null
     createdAt: Date | null
+    isRead: boolean | null
   }
 
   export type MessageCountAggregateOutputType = {
@@ -4538,6 +4540,7 @@ export namespace Prisma {
     emoji: number
     content: number
     createdAt: number
+    isRead: number
     _all: number
   }
 
@@ -4549,6 +4552,7 @@ export namespace Prisma {
     emoji?: true
     content?: true
     createdAt?: true
+    isRead?: true
   }
 
   export type MessageMaxAggregateInputType = {
@@ -4558,6 +4562,7 @@ export namespace Prisma {
     emoji?: true
     content?: true
     createdAt?: true
+    isRead?: true
   }
 
   export type MessageCountAggregateInputType = {
@@ -4567,6 +4572,7 @@ export namespace Prisma {
     emoji?: true
     content?: true
     createdAt?: true
+    isRead?: true
     _all?: true
   }
 
@@ -4649,6 +4655,7 @@ export namespace Prisma {
     emoji: string
     content: string
     createdAt: Date
+    isRead: boolean
     _count: MessageCountAggregateOutputType | null
     _min: MessageMinAggregateOutputType | null
     _max: MessageMaxAggregateOutputType | null
@@ -4675,6 +4682,7 @@ export namespace Prisma {
     emoji?: boolean
     content?: boolean
     createdAt?: boolean
+    isRead?: boolean
     chatGroup?: boolean | ChatGroupDefaultArgs<ExtArgs>
     sender?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["message"]>
@@ -4686,6 +4694,7 @@ export namespace Prisma {
     emoji?: boolean
     content?: boolean
     createdAt?: boolean
+    isRead?: boolean
     chatGroup?: boolean | ChatGroupDefaultArgs<ExtArgs>
     sender?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["message"]>
@@ -4697,6 +4706,7 @@ export namespace Prisma {
     emoji?: boolean
     content?: boolean
     createdAt?: boolean
+    isRead?: boolean
     chatGroup?: boolean | ChatGroupDefaultArgs<ExtArgs>
     sender?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["message"]>
@@ -4708,9 +4718,10 @@ export namespace Prisma {
     emoji?: boolean
     content?: boolean
     createdAt?: boolean
+    isRead?: boolean
   }
 
-  export type MessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "chatGroupId" | "senderId" | "emoji" | "content" | "createdAt", ExtArgs["result"]["message"]>
+  export type MessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "chatGroupId" | "senderId" | "emoji" | "content" | "createdAt" | "isRead", ExtArgs["result"]["message"]>
   export type MessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     chatGroup?: boolean | ChatGroupDefaultArgs<ExtArgs>
     sender?: boolean | UserDefaultArgs<ExtArgs>
@@ -4737,6 +4748,7 @@ export namespace Prisma {
       emoji: string
       content: string
       createdAt: Date
+      isRead: boolean
     }, ExtArgs["result"]["message"]>
     composites: {}
   }
@@ -5168,6 +5180,7 @@ export namespace Prisma {
     readonly emoji: FieldRef<"Message", 'String'>
     readonly content: FieldRef<"Message", 'String'>
     readonly createdAt: FieldRef<"Message", 'DateTime'>
+    readonly isRead: FieldRef<"Message", 'Boolean'>
   }
     
 
@@ -5640,7 +5653,8 @@ export namespace Prisma {
     senderId: 'senderId',
     emoji: 'emoji',
     content: 'content',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    isRead: 'isRead'
   };
 
   export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
@@ -5937,6 +5951,7 @@ export namespace Prisma {
     emoji?: StringFilter<"Message"> | string
     content?: StringFilter<"Message"> | string
     createdAt?: DateTimeFilter<"Message"> | Date | string
+    isRead?: BoolFilter<"Message"> | boolean
     chatGroup?: XOR<ChatGroupScalarRelationFilter, ChatGroupWhereInput>
     sender?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
@@ -5948,6 +5963,7 @@ export namespace Prisma {
     emoji?: SortOrder
     content?: SortOrder
     createdAt?: SortOrder
+    isRead?: SortOrder
     chatGroup?: ChatGroupOrderByWithRelationInput
     sender?: UserOrderByWithRelationInput
   }
@@ -5962,6 +5978,7 @@ export namespace Prisma {
     emoji?: StringFilter<"Message"> | string
     content?: StringFilter<"Message"> | string
     createdAt?: DateTimeFilter<"Message"> | Date | string
+    isRead?: BoolFilter<"Message"> | boolean
     chatGroup?: XOR<ChatGroupScalarRelationFilter, ChatGroupWhereInput>
     sender?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id">
@@ -5973,6 +5990,7 @@ export namespace Prisma {
     emoji?: SortOrder
     content?: SortOrder
     createdAt?: SortOrder
+    isRead?: SortOrder
     _count?: MessageCountOrderByAggregateInput
     _max?: MessageMaxOrderByAggregateInput
     _min?: MessageMinOrderByAggregateInput
@@ -5988,6 +6006,7 @@ export namespace Prisma {
     emoji?: StringWithAggregatesFilter<"Message"> | string
     content?: StringWithAggregatesFilter<"Message"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Message"> | Date | string
+    isRead?: BoolWithAggregatesFilter<"Message"> | boolean
   }
 
   export type UserCreateInput = {
@@ -6212,6 +6231,7 @@ export namespace Prisma {
     emoji: string
     content: string
     createdAt?: Date | string
+    isRead?: boolean
     chatGroup: ChatGroupCreateNestedOneWithoutMessagesInput
     sender: UserCreateNestedOneWithoutSentMessagesInput
   }
@@ -6223,6 +6243,7 @@ export namespace Prisma {
     emoji: string
     content: string
     createdAt?: Date | string
+    isRead?: boolean
   }
 
   export type MessageUpdateInput = {
@@ -6230,6 +6251,7 @@ export namespace Prisma {
     emoji?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isRead?: BoolFieldUpdateOperationsInput | boolean
     chatGroup?: ChatGroupUpdateOneRequiredWithoutMessagesNestedInput
     sender?: UserUpdateOneRequiredWithoutSentMessagesNestedInput
   }
@@ -6241,6 +6263,7 @@ export namespace Prisma {
     emoji?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isRead?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type MessageCreateManyInput = {
@@ -6250,6 +6273,7 @@ export namespace Prisma {
     emoji: string
     content: string
     createdAt?: Date | string
+    isRead?: boolean
   }
 
   export type MessageUpdateManyMutationInput = {
@@ -6257,6 +6281,7 @@ export namespace Prisma {
     emoji?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isRead?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type MessageUncheckedUpdateManyInput = {
@@ -6266,6 +6291,7 @@ export namespace Prisma {
     emoji?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isRead?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -6506,6 +6532,7 @@ export namespace Prisma {
     emoji?: SortOrder
     content?: SortOrder
     createdAt?: SortOrder
+    isRead?: SortOrder
   }
 
   export type MessageMaxOrderByAggregateInput = {
@@ -6515,6 +6542,7 @@ export namespace Prisma {
     emoji?: SortOrder
     content?: SortOrder
     createdAt?: SortOrder
+    isRead?: SortOrder
   }
 
   export type MessageMinOrderByAggregateInput = {
@@ -6524,6 +6552,7 @@ export namespace Prisma {
     emoji?: SortOrder
     content?: SortOrder
     createdAt?: SortOrder
+    isRead?: SortOrder
   }
 
   export type MessageCreateNestedManyWithoutSenderInput = {
@@ -6893,6 +6922,7 @@ export namespace Prisma {
     emoji: string
     content: string
     createdAt?: Date | string
+    isRead?: boolean
     chatGroup: ChatGroupCreateNestedOneWithoutMessagesInput
   }
 
@@ -6902,6 +6932,7 @@ export namespace Prisma {
     emoji: string
     content: string
     createdAt?: Date | string
+    isRead?: boolean
   }
 
   export type MessageCreateOrConnectWithoutSenderInput = {
@@ -6992,6 +7023,7 @@ export namespace Prisma {
     emoji?: StringFilter<"Message"> | string
     content?: StringFilter<"Message"> | string
     createdAt?: DateTimeFilter<"Message"> | Date | string
+    isRead?: BoolFilter<"Message"> | boolean
   }
 
   export type ChatGroupUpsertWithWhereUniqueWithoutUser1Input = {
@@ -7108,6 +7140,7 @@ export namespace Prisma {
     emoji: string
     content: string
     createdAt?: Date | string
+    isRead?: boolean
     sender: UserCreateNestedOneWithoutSentMessagesInput
   }
 
@@ -7117,6 +7150,7 @@ export namespace Prisma {
     emoji: string
     content: string
     createdAt?: Date | string
+    isRead?: boolean
   }
 
   export type MessageCreateOrConnectWithoutChatGroupInput = {
@@ -7349,6 +7383,7 @@ export namespace Prisma {
     emoji: string
     content: string
     createdAt?: Date | string
+    isRead?: boolean
   }
 
   export type ChatGroupCreateManyUser1Input = {
@@ -7370,6 +7405,7 @@ export namespace Prisma {
     emoji?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isRead?: BoolFieldUpdateOperationsInput | boolean
     chatGroup?: ChatGroupUpdateOneRequiredWithoutMessagesNestedInput
   }
 
@@ -7379,6 +7415,7 @@ export namespace Prisma {
     emoji?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isRead?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type MessageUncheckedUpdateManyWithoutSenderInput = {
@@ -7387,6 +7424,7 @@ export namespace Prisma {
     emoji?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isRead?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ChatGroupUpdateWithoutUser1Input = {
@@ -7441,6 +7479,7 @@ export namespace Prisma {
     emoji: string
     content: string
     createdAt?: Date | string
+    isRead?: boolean
   }
 
   export type MessageUpdateWithoutChatGroupInput = {
@@ -7448,6 +7487,7 @@ export namespace Prisma {
     emoji?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isRead?: BoolFieldUpdateOperationsInput | boolean
     sender?: UserUpdateOneRequiredWithoutSentMessagesNestedInput
   }
 
@@ -7457,6 +7497,7 @@ export namespace Prisma {
     emoji?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isRead?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type MessageUncheckedUpdateManyWithoutChatGroupInput = {
@@ -7465,6 +7506,7 @@ export namespace Prisma {
     emoji?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isRead?: BoolFieldUpdateOperationsInput | boolean
   }
 
 

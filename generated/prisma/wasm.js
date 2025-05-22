@@ -152,7 +152,8 @@ exports.Prisma.MessageScalarFieldEnum = {
   senderId: 'senderId',
   emoji: 'emoji',
   content: 'content',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  isRead: 'isRead'
 };
 
 exports.Prisma.SortOrder = {
