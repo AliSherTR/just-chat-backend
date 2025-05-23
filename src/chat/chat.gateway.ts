@@ -69,78 +69,22 @@ export class ChatGateway {
     }
   }
 
-  @SubscribeMessage('startChat')
-  async handleStartChat(
-    client: Socket,
-    payload: { recipientId: string },
-  ): Promise<void> {
-    const senderId = client.data.user.id;
-    const recipientId = payload.recipientId?.trim();
-
-    if (!recipientId || typeof recipientId !== 'string') {
-      client.emit('error', { message: 'Invalid recipient ID' });
-      this.logger.error(`Invalid recipientId: ${JSON.stringify(payload)}`);
-      return;
-    }
-
-    // Verify recipient exists
-    const recipient = await this.prisma.user.findUnique({
-      where: { id: recipientId },
-    });
-    if (!recipient) {
-      client.emit('error', { message: 'Recipient does not exist' });
-      this.logger.error(`Recipient not found: ${recipientId}`);
-      return;
-    }
-
-    // Find or create ChatGroup
-    const userIds = [senderId, recipientId].sort(); // Consistent ordering
-    let chatGroup = await this.prisma.chatGroup.findUnique({
-      where: { user1Id_user2Id: { user1Id: userIds[0], user2Id: userIds[1] } },
-    });
-
-    if (!chatGroup) {
-      chatGroup = await this.prisma.chatGroup.create({
-        data: { user1Id: userIds[0], user2Id: userIds[1] },
-      });
-    }
-
-    const recipientSocketId = this.connectedUsers.get(recipientId);
-    if (!recipientSocketId) {
-      client.emit('error', { message: 'Recipient is not online' });
-      this.logger.warn(`Recipient offline: ${recipientId}`);
-      return;
-    }
-
-    // Emit chatStarted to both users
-    client.emit('chatStarted', {
-      with: recipientId,
-      chatGroupId: chatGroup.id,
-    });
-    this.server.to(recipientSocketId).emit('chatStarted', {
-      with: senderId,
-      chatGroupId: chatGroup.id,
-    });
-
-    this.logger.log(
-      `Chat started between ${senderId} and ${recipientId} in group ${chatGroup.id}`,
-    );
-  }
-
   @SubscribeMessage('sendMessage')
   async handleSendMessage(
     client: Socket,
-    payload: { recipientId: string; content: string },
+    payload: { recipientId?: string; receiverEmail?: string; content: string },
   ): Promise<void> {
     const senderId = client.data.user.id;
-    console.log(senderId);
     const recipientId = payload.recipientId?.trim();
+    const receiverEmail = payload.receiverEmail?.trim();
     const content = payload.content?.trim();
 
     // Validate inputs
-    if (!recipientId || typeof recipientId !== 'string') {
-      client.emit('error', { message: 'Invalid recipient ID' });
-      this.logger.error(`Invalid recipientId: ${JSON.stringify(payload)}`);
+    if (!recipientId && !receiverEmail) {
+      client.emit('error', { message: 'Recipient ID or email is required' });
+      this.logger.error(
+        `Missing recipientId or receiverEmail: ${JSON.stringify(payload)}`,
+      );
       return;
     }
     if (!content || content.length === 0) {
@@ -150,17 +94,34 @@ export class ChatGateway {
     }
 
     // Verify recipient exists
-    const recipient = await this.prisma.user.findUnique({
-      where: { id: recipientId },
-    });
+    let recipient;
+    if (receiverEmail) {
+      recipient = await this.prisma.user.findUnique({
+        where: { email: receiverEmail },
+      });
+    } else {
+      recipient = await this.prisma.user.findUnique({
+        where: { id: recipientId },
+      });
+    }
+
     if (!recipient) {
       client.emit('error', { message: 'Recipient does not exist' });
-      this.logger.error(`Recipient not found: ${recipientId}`);
+      this.logger.error(`Recipient not found: ${recipientId || receiverEmail}`);
+      return;
+    }
+
+    const otherUserId = recipient.id;
+
+    // Prevent sending message to self
+    if (senderId === otherUserId) {
+      client.emit('error', { message: 'Cannot send message to yourself' });
+      this.logger.error(`User ${senderId} attempted to send message to self`);
       return;
     }
 
     // Find or create ChatGroup
-    const userIds = [senderId, recipientId].sort();
+    const userIds = [senderId, otherUserId].sort();
     let chatGroup = await this.prisma.chatGroup.findUnique({
       where: { user1Id_user2Id: { user1Id: userIds[0], user2Id: userIds[1] } },
     });
@@ -181,10 +142,6 @@ export class ChatGateway {
         isRead: false,
       },
     });
-
-    // Determine recipient (other user in the chat group)
-    const otherUserId =
-      chatGroup.user1Id === senderId ? chatGroup.user2Id : chatGroup.user1Id;
 
     // Calculate unread count for the recipient
     const unreadCount = await this.prisma.message.count({
@@ -241,6 +198,7 @@ export class ChatGateway {
 
     // Emit message and chat update to recipient if online
     const recipientSocketId = this.connectedUsers.get(otherUserId);
+    console.log(recipientSocketId);
     if (recipientSocketId) {
       this.server.to(recipientSocketId).emit('message', {
         id: message.id,
