@@ -7,6 +7,8 @@ import {
   Param,
   Request,
   Query,
+  Post,
+  Patch,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -100,5 +102,10 @@ export class ChatsController {
   async deleteMessage(@Req() req, @Param() params: DeleteMessageDto) {
     const userId = req.user.id;
     return this.chatsService.deleteMessage(userId, params.messageId);
+  }
+
+  @Patch('markMessagesAsRead')
+  async markMessagesAsRead(@Param() params: any) {
+    return this.chatsService.markMessagesAsRead(params.id);
   }
 }

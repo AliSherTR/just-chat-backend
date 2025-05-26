@@ -608,4 +608,26 @@ export class ChatService {
       );
     }
   }
+  async markMessagesAsRead(chatGroupId: string) {
+    const messages = await this.prismaService.message.findMany({
+      where: {
+        chatGroupId: chatGroupId,
+      },
+    });
+
+    if (!messages.length) {
+      throw new NotFoundException(createResponse('error', 'message not found'));
+    }
+
+    await this.prismaService.message.updateMany({
+      where: {
+        chatGroupId: chatGroupId,
+      },
+      data: {
+        isRead: true,
+      },
+    });
+
+    return createResponse('success', 'messages fetched successfully');
+  }
 }
